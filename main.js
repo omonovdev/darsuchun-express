@@ -2,7 +2,6 @@ import express from 'express'
 import { connectDb } from './db.js'
 import { Odam } from './user.js'
 
-
 connectDb()
 
 const app = express()
@@ -12,8 +11,8 @@ app.get('/', (req, res) => {
 	res.send('Bu bosh sahifa')
 })
 
-app.post('/odam', (req, res) => {
-	const yangiOdam = Odam.create(req.body)
+app.post('/odam', async (req, res) => {
+	const yangiOdam = await Odam.create(req.body)
 	res.status(201).json({ message: 'Successfully created' })
 })
 
@@ -36,16 +35,13 @@ app.patch('/odam/:id', async (req, res) => {
 		runValidators: true,
 	})
 	if (!odam) {
-		res.status(404).json({ message: 'Not found' })
+		return res.status(404).json({ message: 'Not found' })
 	}
 	res.status(200).json(odam)
 })
 
 app.delete('/odam/:id', async (req, res) => {
-	let odam = await Odam.findByIdAndDelete(req.params.id, req.body, {
-		new: true,
-		runValidators: true,
-	})
+	let odam = await Odam.findByIdAndDelete(req.params.id)
 	if (!odam) {
 		res.status(404).json({ message: 'Not found' })
 	}
