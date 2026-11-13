@@ -83,7 +83,7 @@ app.delete('/odam/:id', async (req, res) => {
 
 app.get('/odamLogin/:login', async (req, res) => {
 	try {
-		const odam = await Odam.fidOne({ login: req.params.login })
+		const odam = await Odam.findOne({ login: req.params.login })
 		if (!odam) {
 			return res.status(404).json({ message: 'NOt found user' })
 		}
